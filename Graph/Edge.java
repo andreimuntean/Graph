@@ -1,75 +1,37 @@
 /**
- * Represents a graph edge.
+ * Represents the interface of a graph edge.
  *
  * @author Andrei Muntean
  */
-public class Edge
+interface Edge
 {
-	// The origin vertex.
-	private Vertex origin;
-
-	// The destination vertex.
-	private Vertex destination;
-
 	/**
-	 * Constructs an edge from two vertices.
+	 * Gets the vertices that constitute the edge.
 	 *
-	 * @param origin The origin vertex.
-	 * @param destination The destination vertex.
+	 * @return The vertices that constitute the edge.
 	 */
-	public Edge(Vertex origin, Vertex destination)
-	{
-		this.origin = origin;
-		this.destination = destination;
-	}
+	Vertex[] getVertices();
 
 	/**
-	 * Gets the origin vertex.
-	 *
-	 * @return The origin vertex.
+	 * Determines whether the edge is directed.
 	 */
-	public Vertex getOrigin()
-	{
-		return origin;
-	}
+	boolean isDirected();
 
 	/**
-	 * Gets the destination vertex.
-	 *
-	 * @return The destination vertex.
-	 */
-	public Vertex getDestination()
-	{
-		return destination;
-	}
-
-	/**
-	 * Checks whether the specified vertex is contained by the edge. 
+	 * Determines whether the specified vertex is contained by the edge. 
 	 *
 	 * @param vertex A vertex.
 	 *
-	 * @return True if the specified vertex is the origin or the destination.
+	 * @return True if the specified vertex is contained by the edge.
 	 */
-	public boolean contains(Vertex vertex)
-	{
-		return vertex.equals(origin) || vertex.equals(destination);
-	}
+	boolean contains(Vertex vertex);
 
 	/**
-	 * Checks whether this edge has the same vertices as a specified edge.
+	 * Determines whether this edge is equal to another edge.
 	 *
 	 * @param edge A specified edge.
 	 *
-	 * @return True if the edges have the same vertices.
+	 * @return True if the edges are equal.
 	 */
-	public boolean equals(Edge edge)
-	{
-		return edge.getOrigin().equals(origin) && edge.getDestination().equals(destination);
-	}
-
-	@Override
-	public String toString()
-	{
-		return "{" + origin + ", " + destination + "}";
-	}
+	boolean equals(Edge edge);
 }

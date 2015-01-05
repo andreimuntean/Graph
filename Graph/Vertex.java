@@ -78,6 +78,6 @@ public class Vertex
 	@Override
 	public String toString()
 	{
-		return "(" + id + ")";
+		return "" + id;
 	}
 }
