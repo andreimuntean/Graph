@@ -140,6 +140,7 @@ public class Graph
      * Gets the vertex with the specified index.
      *
      * @return The vertex with the specified index.
+     *
      * @exception ArrayIndexOutOfBoundsException Specified index is out of bounds.
      */
     public Vertex getVertex(int index) throws ArrayIndexOutOfBoundsException
@@ -151,6 +152,7 @@ public class Graph
      * Gets the edge with the specified index.
      *
      * @return The edge with the specified index.
+     *
      * @exception ArrayIndexOutOfBoundsException Specified index is out of bounds.
      */
     public Edge getEdge(int index) throws ArrayIndexOutOfBoundsException
@@ -276,14 +278,45 @@ public class Graph
             {
                 edges.remove(edgeIndex);
 
-                // Since the next index became the current index,
-                // this stops the index from incrementing.
+                // Next index is now the current index.
+                // This stops the index from incrementing.
                 --edgeIndex;
             }
         }
 
         // Removes the vertex.
         vertices.remove(index);
+    }
+
+    /**
+     * Gets all the edges that originate from a specified vertex.
+     *
+     * @param vertex A vertex.
+     *
+     * @return An array of edges that originate from the specified vertex.
+     */
+    public Edge[] getPathsFrom(Vertex vertex)
+    {
+        ArrayList<Edge> paths = new ArrayList<Edge>();
+
+        for (Edge edge : edges)
+        {
+            Vertex[] vertices = edge.getVertices();
+
+            if (edge.isDirected())
+            {
+                if (vertices[0].equals(vertex))
+                {
+                    paths.add(edge);
+                }
+            }
+            else if (vertices[0].equals(vertex) || vertices[1].equals(vertex))
+            {
+                paths.add(edge);
+            }
+        }
+
+        return paths.toArray(new Edge[paths.size()]);
     }
 
     /**
@@ -309,46 +342,54 @@ public class Graph
             // Gets the elements of the vertex set.
             vertexString = vertexString.substring(5, vertexString.length() - 1);
 
-            // Goes through every element.
-            for (String element : vertexString.split(", "))
+            // If this is not an empty set.
+            if (vertexString.length() > 0)
             {
-                int id = Integer.parseInt(element);
+                // Goes through every element.
+                for (String element : vertexString.split(", "))
+                {
+                    int id = Integer.parseInt(element);
 
-                // Creates a vertex.
-                add(new Vertex(id));
+                    // Creates a vertex.
+                    add(new Vertex(id));
+                }
             }
 
             // Gets the elements of the edge set.
             edgeString = edgeString.substring(5, edgeString.length() - 1);
 
-            // Converts the pairs between square brackets into undirected edges.
-            for (String pair : StringManipulation.getSubstringsBetween(edgeString, "[", "]"))
+            // If this is not an empty set.
+            if (edgeString.length() > 0)
             {
-                String[] ids = pair.split(", ");
+                // Converts the pairs between square brackets into undirected edges.
+                for (String pair : StringManipulation.getSubstringsBetween(edgeString, "[", "]"))
+                {
+                    String[] ids = pair.split(", ");
 
-                // The id of the first vertex.
-                int firstId = Integer.parseInt(ids[0]);
+                    // The id of the first vertex.
+                    int firstId = Integer.parseInt(ids[0]);
 
-                // The id of the second vertex.
-                int secondId = Integer.parseInt(ids[1]);
+                    // The id of the second vertex.
+                    int secondId = Integer.parseInt(ids[1]);
 
-                // Creates the two vertices, forms the edge and adds it to the list of edges.
-                add(new UndirectedEdge(new Vertex(firstId), new Vertex(secondId)));
-            }
+                    // Creates the two vertices, forms the edge and adds it to the list of edges.
+                    add(new UndirectedEdge(new Vertex(firstId), new Vertex(secondId)));
+                }
 
-            // Converts the pairs between round brackets into directed edges.
-            for (String pair : StringManipulation.getSubstringsBetween(edgeString, "(", ")"))
-            {
-                String[] ids = pair.split(", ");
+                // Converts the pairs between round brackets into directed edges.
+                for (String pair : StringManipulation.getSubstringsBetween(edgeString, "(", ")"))
+                {
+                    String[] ids = pair.split(", ");
 
-                // The id of the origin vertex.
-                int originId = Integer.parseInt(ids[0]);
+                    // The id of the origin vertex.
+                    int originId = Integer.parseInt(ids[0]);
 
-                // The id of the target vertex.
-                int targetId = Integer.parseInt(ids[1]);
+                    // The id of the target vertex.
+                    int targetId = Integer.parseInt(ids[1]);
 
-                // Creates the two vertices, forms the edge and adds it to the list of edges.
-                add(new DirectedEdge(new Vertex(originId), new Vertex(targetId)));
+                    // Creates the two vertices, forms the edge and adds it to the list of edges.
+                    add(new DirectedEdge(new Vertex(originId), new Vertex(targetId)));
+                }
             }
         }
         catch (Exception exception)
